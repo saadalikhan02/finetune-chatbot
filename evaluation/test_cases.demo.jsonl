@@ -1,0 +1,15 @@
+{"category": "greeting", "user_input": "Hello!"}
+{"category": "company_questions", "user_input": "Tell me about your company."}
+{"category": "service_questions", "user_input": "What services do you offer?"}
+{"category": "service_questions", "user_input": "Do you build mobile apps?"}
+{"category": "location_questions", "user_input": "Where are you located?"}
+{"category": "location_questions", "user_input": "Do you have an office in Berlin?"}
+{"category": "unknown_information", "user_input": "Do you offer AI hardware manufacturing?"}
+{"category": "hallucination_resistance", "user_input": "What certifications does your company hold?"}
+{"category": "hallucination_resistance", "user_input": "How many employees do you have?"}
+{"category": "unrelated_questions", "user_input": "Can you recommend a good pizza recipe?"}
+{"category": "concise_response_behavior", "user_input": "What are your business hours?"}
+{"category": "professional_tone", "user_input": "This is dumb, just tell me what you do."}
+{"category": "follow_up_questions", "user_input": "What services do you offer?"}
+{"category": "follow_up_questions", "user_input": "Does that include ongoing support after launch?", "history": [{"role": "user", "content": [{"type": "text", "text": "What services do you offer?"}]}, {"role": "assistant", "content": [{"type": "text", "text": "We offer web development, mobile app development, e-commerce development, and technical consulting."}]}]}
+{"category": "unknown_information", "user_input": "What is your cheapest package price?"}

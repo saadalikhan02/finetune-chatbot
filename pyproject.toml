@@ -1,0 +1,37 @@
+[project]
+name = "corporate-chatbot"
+version = "0.1.0"
+description = "QLoRA fine-tuning project for a Gemma 3 1B corporate website chatbot"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "torch>=2.4.0",
+    "transformers>=4.51.0",
+    "datasets>=2.20.0",
+    "accelerate>=1.0.0",
+    "peft>=0.14.0",
+    "trl>=0.15.0",
+    "bitsandbytes>=0.45.0",
+    "sentencepiece>=0.2.0",
+    "safetensors>=0.4.3",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0.1",
+    "huggingface-hub>=0.25.0",
+    "httpx>=0.27.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.2.0",
+    "langdetect>=1.0.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"

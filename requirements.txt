@@ -1,0 +1,29 @@
+# Core ML stack
+# Versions are lower-bounded at releases known to support Gemma 3 and the
+# current (non-deprecated) TRL SFTTrainer / SFTConfig API. Upgrading within
+# a major version should be safe; re-check scripts/train.py if you jump a
+# major version of transformers, trl, or peft.
+torch>=2.4.0
+transformers>=4.51.0
+datasets>=2.20.0
+accelerate>=1.0.0
+peft>=0.14.0
+trl>=0.15.0
+bitsandbytes>=0.45.0
+sentencepiece>=0.2.0
+safetensors>=0.4.3
+
+# Config / environment
+pyyaml>=6.0
+python-dotenv>=1.0.1
+
+# Hugging Face auth / hub helpers
+huggingface-hub>=0.25.0
+
+# Website crawling / dataset-generation pipeline (scripts/webdata/*.py,
+# src/website_pipeline/). Independent of the training stack above - none of
+# these are needed just to run scripts/train.py.
+httpx>=0.27.0
+beautifulsoup4>=4.12.0
+lxml>=5.2.0
+langdetect>=1.0.9

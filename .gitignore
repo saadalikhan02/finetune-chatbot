@@ -1,0 +1,58 @@
+# Environment / secrets
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+*.egg
+.Python
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (keep folder structure, ignore contents)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/train/*
+!data/train/.gitkeep
+data/validation/*
+!data/validation/.gitkeep
+
+# Website crawl pipeline (scripts/webdata/*.py): raw HTML snapshots and the
+# per-page cleaned JSON are large and fully regenerable by re-running
+# scripts/webdata/crawl_site.py + clean_pages.py, so they're not tracked.
+# data/knowledge/ (facts + generated QA banks) and data/datasets/ (final
+# train/validation/test) ARE tracked - they're the reviewed, curated output
+# this whole pipeline exists to produce.
+data/website/raw/*
+data/website/clean/*
+
+# Training outputs (adapters, checkpoints, logs) - large binary artifacts
+outputs/*
+!outputs/.gitkeep
+
+# Hugging Face / model caches
+.cache/
+huggingface/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+wandb/

@@ -1,0 +1,27 @@
+# LoRA / PEFT configuration for fine-tuning google/gemma-3-1b-it.
+#
+# Target module selection:
+# Gemma 3's decoder layers (Gemma3ForCausalLM / Gemma3TextModel) use the same
+# linear-projection naming convention as Gemma 2 and Llama-family models:
+#   self_attn.{q_proj,k_proj,v_proj,o_proj}
+#   mlp.{gate_proj,up_proj,down_proj}
+# Attaching LoRA to all seven of these (attention + MLP projections) is the
+# commonly recommended configuration for small instruction-tuned models: the
+# attention projections adapt *what* the model attends to, and the MLP
+# projections adapt *how* it transforms that information, which matters for
+# teaching a new response style/behavior rather than just new attention
+# patterns. If you inspect a downloaded checkpoint and the names differ,
+# update this list to match (see scripts/train.py --print-model-modules).
+r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+bias: "none"
+target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+task_type: "CAUSAL_LM"

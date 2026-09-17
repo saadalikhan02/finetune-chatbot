@@ -1,0 +1,54 @@
+# Configuration for the Technyx Systems website crawling / dataset-generation
+# pipeline (scripts/webdata/*.py). Separate from the model training configs
+# (configs/training.yaml, configs/lora.yaml) since this pipeline runs before
+# and independently of training.
+
+base_url: "https://technyxsystems.com/"
+
+# Only URLs on these hosts are crawled. www./non-www. are treated as the
+# same site.
+allowed_hosts:
+  - "technyxsystems.com"
+  - "www.technyxsystems.com"
+
+# Preferred language for the primary dataset. Pages whose detected language
+# is not this are still saved under data/website/, but excluded from
+# QA/dataset generation. Change this if Technyx publishes localized content.
+primary_language: "en"
+
+# Politeness settings
+request_timeout_seconds: 20
+request_delay_seconds: 0.5
+max_retries: 2
+user_agent: "TechnyxDatasetBot/1.0 (+internal corporate chatbot dataset project; contact: abdul.basit@technyxsystems.com)"
+
+# Safety cap so a crawler bug can't runaway-crawl the live site.
+max_pages: 150
+
+# URL path prefixes that are never crawled even if discovered as internal
+# links (admin/login/tracking/etc). Matched as a prefix against the URL path.
+excluded_path_prefixes:
+  - "/wp-admin"
+  - "/admin"
+  - "/login"
+  - "/cdn-cgi"
+  - "/_next"
+  - "/api"
+
+# Query string parameter names stripped during URL normalization (tracking
+# params). Any parameter not in this list is preserved.
+tracking_query_params:
+  - "utm_source"
+  - "utm_medium"
+  - "utm_campaign"
+  - "utm_term"
+  - "utm_content"
+  - "fbclid"
+  - "gclid"
+  - "msclkid"
+  - "mc_cid"
+  - "mc_eid"
+
+sitemap_paths:
+  - "/sitemap.xml"
+  - "/sitemap_index.xml"

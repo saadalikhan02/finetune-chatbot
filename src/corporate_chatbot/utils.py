@@ -1,0 +1,174 @@
+"""Small, dependency-light helpers: environment/hardware detection, JSONL
+I/O, seeding, and Hugging Face token lookup.
+
+Kept free of any project- or company-specific data.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import platform
+import random
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+
+def load_dotenv_if_present(dotenv_path: str | Path = ".env") -> None:
+    """Load environment variables from a .env file if python-dotenv and the
+    file are both available. Safe no-op otherwise."""
+    path = Path(dotenv_path)
+    if not path.exists():
+        return
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return
+    load_dotenv(dotenv_path=path)
+
+
+def get_hf_token() -> str | None:
+    """Return a Hugging Face token from the environment, if any.
+
+    Checks HF_TOKEN first (this project's convention), then the standard
+    HUGGING_FACE_HUB_TOKEN variable used by huggingface_hub. Never logs or
+    returns the token in a printable/truncated form here - callers should
+    avoid printing it entirely.
+    """
+    return os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+
+
+def set_seed(seed: int) -> None:
+    """Seed Python, NumPy (if installed), and PyTorch (if installed)."""
+    random.seed(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    try:
+        import numpy as np
+
+        np.random.seed(seed)
+    except ImportError:
+        pass
+    try:
+        import torch
+
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(seed)
+    except ImportError:
+        pass
+
+
+@dataclass
+class HardwareInfo:
+    python_version: str
+    torch_version: str | None
+    transformers_version: str | None
+    cuda_available: bool
+    cuda_version: str | None
+    gpu_name: str | None
+    gpu_vram_gb: float | None
+
+
+def detect_hardware() -> HardwareInfo:
+    """Inspect the local environment for Python/PyTorch/Transformers/CUDA info.
+
+    Never raises: missing packages simply show up as None so this can be
+    called safely from lightweight scripts (e.g. dataset validation) that
+    don't require torch to be installed.
+    """
+    torch_version: str | None = None
+    cuda_available = False
+    cuda_version: str | None = None
+    gpu_name: str | None = None
+    gpu_vram_gb: float | None = None
+
+    try:
+        import torch
+
+        torch_version = torch.__version__
+        cuda_available = torch.cuda.is_available()
+        if cuda_available:
+            cuda_version = torch.version.cuda
+            gpu_name = torch.cuda.get_device_name(0)
+            gpu_vram_gb = torch.cuda.get_device_properties(0).total_memory / (1024**3)
+    except ImportError:
+        pass
+
+    transformers_version: str | None = None
+    try:
+        import transformers
+
+        transformers_version = transformers.__version__
+    except ImportError:
+        pass
+
+    return HardwareInfo(
+        python_version=platform.python_version(),
+        torch_version=torch_version,
+        transformers_version=transformers_version,
+        cuda_available=cuda_available,
+        cuda_version=cuda_version,
+        gpu_name=gpu_name,
+        gpu_vram_gb=gpu_vram_gb,
+    )
+
+
+def print_environment_report(hw: HardwareInfo | None = None) -> HardwareInfo:
+    """Print a short environment report and return the detected HardwareInfo."""
+    hw = hw or detect_hardware()
+    print("## Environment")
+    print(f"Python:       {hw.python_version}")
+    print(f"PyTorch:      {hw.torch_version or 'not installed'}")
+    print(f"Transformers: {hw.transformers_version or 'not installed'}")
+    print(f"CUDA:         {hw.cuda_version if hw.cuda_available else 'not available'}")
+    print(f"GPU:          {hw.gpu_name or 'none detected'}")
+    if hw.gpu_vram_gb is not None:
+        print(f"VRAM:         {hw.gpu_vram_gb:.1f} GB")
+    else:
+        print("VRAM:         n/a")
+
+    if not hw.cuda_available:
+        print(
+            "\nWARNING: No CUDA-capable GPU was detected. QLoRA fine-tuning "
+            "relies on 4-bit GPU quantization (via bitsandbytes) and is not "
+            "practical on CPU-only hardware - a training run that would take "
+            "minutes on a GPU can take many hours to days on CPU, if it runs "
+            "at all. Use a CUDA GPU (e.g. Google Colab, a local NVIDIA GPU, "
+            "or a cloud GPU instance) for actual training."
+        )
+    return hw
+
+
+def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
+    """Read a JSONL file into a list of dicts. Raises on invalid JSON so
+    problems surface immediately rather than being silently skipped."""
+    path = Path(path)
+    records = []
+    with path.open("r", encoding="utf-8") as f:
+        for line_num, line in enumerate(f, start=1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                records.append(json.loads(line))
+            except json.JSONDecodeError as e:
+                raise ValueError(
+                    f"{path}:{line_num}: invalid JSON ({e.msg})"
+                ) from e
+    return records
+
+
+def write_jsonl(path: str | Path, records: list[dict[str, Any]]) -> None:
+    """Write a list of dicts to a JSONL file, creating parent directories."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as f:
+        for record in records:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def eprint(*args: Any, **kwargs: Any) -> None:
+    """Print to stderr (used for warnings/errors so stdout stays clean)."""
+    print(*args, file=sys.stderr, **kwargs)
