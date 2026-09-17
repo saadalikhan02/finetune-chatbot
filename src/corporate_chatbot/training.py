@@ -7,10 +7,50 @@ place if a future TRL release changes them.
 
 from __future__ import annotations
 
+import inspect
 from typing import Any
 
 from .config import TrainingSettings
 from .formatting import format_example_for_training
+
+# A handful of SFTConfig/TrainingArguments fields have been renamed across
+# TRL/transformers releases. If the primary name below isn't accepted by the
+# installed version, we try each alias in order before giving up on that
+# setting - see _build_kwargs_for().
+_FIELD_ALIASES: dict[str, tuple[str, ...]] = {
+    "warmup_ratio": ("warmup_ratio",),
+    "max_seq_length": ("max_seq_length", "max_length"),
+    "eval_strategy": ("eval_strategy", "evaluation_strategy"),
+}
+
+
+def _build_kwargs_for(cls: type, desired: dict[str, Any]) -> dict[str, Any]:
+    """Filter/rename a dict of desired kwargs down to what ``cls.__init__``
+    actually accepts in the currently installed library version, trying any
+    known aliases (see _FIELD_ALIASES) before dropping a setting entirely.
+    Prints a warning for anything that had to be dropped, so a version
+    mismatch is visible rather than silently changing behavior.
+    """
+    accepted = set(inspect.signature(cls.__init__).parameters)
+    resolved: dict[str, Any] = {}
+    dropped: list[str] = []
+
+    for key, value in desired.items():
+        candidates = _FIELD_ALIASES.get(key, (key,))
+        for candidate in candidates:
+            if candidate in accepted:
+                resolved[candidate] = value
+                break
+        else:
+            dropped.append(key)
+
+    if dropped:
+        print(
+            f"WARNING: the installed {cls.__module__}.{cls.__name__} does not accept "
+            f"these config field(s) (likely a TRL/transformers version difference): "
+            f"{dropped}. Training will proceed with that library's defaults for them."
+        )
+    return resolved
 
 
 def format_dataset_for_sft(dataset: Any, tokenizer: Any) -> Any:
@@ -33,7 +73,7 @@ def build_sft_config(training_cfg: TrainingSettings, cuda_available: bool):
     bf16 = training_cfg.bf16 and cuda_available
     fp16 = training_cfg.fp16 and cuda_available and not bf16
 
-    return SFTConfig(
+    desired = dict(
         output_dir=training_cfg.output_dir,
         seed=training_cfg.seed,
         num_train_epochs=training_cfg.num_train_epochs,
@@ -62,6 +102,8 @@ def build_sft_config(training_cfg: TrainingSettings, cuda_available: bool):
         metric_for_best_model=training_cfg.metric_for_best_model,
         report_to=training_cfg.report_to,
     )
+
+    return SFTConfig(**_build_kwargs_for(SFTConfig, desired))
 
 
 def build_trainer(
