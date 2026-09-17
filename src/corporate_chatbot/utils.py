@@ -30,14 +30,23 @@ def load_dotenv_if_present(dotenv_path: str | Path = ".env") -> None:
 
 
 def get_hf_token() -> str | None:
-    """Return a Hugging Face token from the environment, if any.
+    """Return a Hugging Face token, checking (in order): the HF_TOKEN env
+    var (this project's convention), the standard HUGGING_FACE_HUB_TOKEN
+    env var, then the on-disk login cache written by `huggingface-cli
+    login` or `huggingface_hub.notebook_login()` (e.g. in a Colab session).
 
-    Checks HF_TOKEN first (this project's convention), then the standard
-    HUGGING_FACE_HUB_TOKEN variable used by huggingface_hub. Never logs or
-    returns the token in a printable/truncated form here - callers should
-    avoid printing it entirely.
+    Never logs or returns the token in a printable/truncated form here -
+    callers should avoid printing it entirely.
     """
-    return os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+    token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+    if token:
+        return token
+    try:
+        from huggingface_hub import get_token
+
+        return get_token()
+    except ImportError:
+        return None
 
 
 def set_seed(seed: int) -> None:
