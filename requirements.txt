@@ -13,6 +13,12 @@ bitsandbytes>=0.45.0
 sentencepiece>=0.2.0
 safetensors>=0.4.3
 
+# Not used directly (this project quantizes via bitsandbytes, not torchao),
+# but recent peft versions probe torchao's availability when attaching a
+# LoRA adapter and *raise* instead of skipping if an old torchao is present
+# (e.g. Colab's preinstalled 0.10.0) - pinned here purely to avoid that crash.
+torchao>=0.16.0
+
 # Config / environment
 pyyaml>=6.0
 python-dotenv>=1.0.1
