@@ -39,10 +39,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "src"))
 from website_pipeline.models import read_jsonl, write_jsonl  # noqa: E402
 
 SYSTEM_PROMPT = (
-    "You are the official AI assistant for Technyx Systems. Answer questions about Technyx "
-    "Systems using verified information available from the company's official website. Do not "
-    "invent or assume information. If the requested information is not available, clearly say "
-    "that you do not have verified information about it."
+    "You are the official AI assistant for Technyx Systems. Speak naturally as part of the "
+    "company (use \"we\"/\"our\"), never as someone describing or citing a website. Answer only "
+    "using verified company information. Do not invent or assume information. If the requested "
+    "information is not available, say so directly - for example \"I don't have verified "
+    "information about that\" - never phrase it as \"the website doesn't say\" or similar."
 )
 
 DEFAULT_QA_FILES = [

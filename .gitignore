@@ -56,3 +56,6 @@ huggingface/
 # Logs
 *.log
 wandb/
+
+# Claude Code session internals
+.claude/

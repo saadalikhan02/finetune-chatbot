@@ -131,9 +131,9 @@ records.append(qa(
 ))
 records.append(qa(
     "Who leads Technyx?",
-    "Technyx's site says its approach comes from its founders, who combine academic insight with "
-    "real-world technology leadership - it doesn't name specific individuals or title-holders "
-    "(e.g. a named CEO) on the pages that are public.",
+    "Our approach comes from our founders, who combine academic insight with real-world "
+    "technology leadership. We don't have a specific named individual or title-holder (e.g. a "
+    "CEO) to point you to publicly.",
     "company",
     [("/faq", "Our approach comes from our founders")],
 ))
@@ -151,7 +151,7 @@ records.append(qa(
 ))
 records.append(qa(
     "Does Technyx have any client testimonials?",
-    "Yes. Technyx's site features testimonials from people including Shane Gorman (Head of "
+    "Yes. We have testimonials from people including Shane Gorman (Head of "
     "Internal Communication at Nestlé), Tom Otton (Managing Director and Founder at Create), "
     "and Dina Saadeh (General Manager at Blue Barracuda), among others, describing Technyx as a "
     "reliable, committed delivery partner.",
@@ -164,9 +164,9 @@ records.append(qa(
 ))
 records.append(qa(
     "Which companies has Technyx worked with?",
-    "The testimonials published on Technyx's site name Nestlé, Create, Majid Al Futtaim, Blue "
-    "Barracuda, FGS, THE AKKAAS, and SCPS. The site doesn't publish a full client list beyond "
-    "these testimonial attributions.",
+    "Client testimonials we've shared name Nestlé, Create, Majid Al Futtaim, Blue Barracuda, "
+    "FGS, THE AKKAAS, and SCPS. We don't have a full client list beyond these testimonial "
+    "attributions to share.",
     "client",
     [
         ("/", "Nestlé"),
@@ -314,10 +314,10 @@ records.append(qa(
 ))
 records.append(qa(
     "What frontend technologies does Technyx use?",
-    "On their published technology ecosystem, Technyx lists React, Next.js, Vue.js, Angular, "
-    "TypeScript, Svelte, Tailwind, and MUI under Frontend. (Their site organizes the wider stack "
-    "into categories like Backend, Databases, AI/ML, Cloud, and DevOps too, but only the Frontend "
-    "list is published in detail.)",
+    "Our published technology ecosystem lists React, Next.js, Vue.js, Angular, TypeScript, "
+    "Svelte, Tailwind, and MUI under Frontend. (We organize the wider stack into categories like "
+    "Backend, Databases, AI/ML, Cloud, and DevOps too, but only the Frontend list is published "
+    "in detail.)",
     "technology",
     [("/", "React")],
 ))
@@ -333,8 +333,7 @@ records.append(qa(
 # ---------------------------------------------------------------- contact / locations
 records.append(qa(
     "How can I contact Technyx?",
-    "You can email info@technyxsystems.com, connect on WhatsApp, or use the contact form on "
-    "their website.",
+    "You can email info@technyxsystems.com, connect on WhatsApp, or use our contact form.",
     "contact",
     [("/contact", "info@technyxsystems.com"), ("/contact", "Connect on WhatsApp")],
 ))
@@ -401,8 +400,8 @@ records.append(qa(
     "What services does Technyx provide, and how can I get in touch with them?",
     "Technyx offers Product & Platform Engineering, Frontend Engineering, Digital Experience "
     "Platforms & Integrations, DevOps & Cloud Infrastructure, AI Consulting & Automation, and "
-    "Creative & Campaign Operations. You can reach them by email at info@technyxsystems.com, "
-    "via WhatsApp, or through the contact form on their site.",
+    "Creative & Campaign Operations. You can reach us by email at info@technyxsystems.com, "
+    "via WhatsApp, or through our contact form.",
     "multi_fact",
     [
         ("/services", "Specialized services covering the full lifecycle"),
@@ -424,9 +423,9 @@ records.append(qa(
 # ---------------------------------------------------------------- portfolio
 records.append(qa(
     "Can you share examples of Technyx's past work or projects?",
-    "Technyx doesn't publish individual project case studies on its site. What is published: "
-    "client testimonials (e.g. from Nestlé, Create, Majid Al Futtaim, Blue Barracuda, FGS, "
-    "THE AKKAAS, and SCPS) and the headline figure of 100+ projects delivered over 10+ years.",
+    "We don't have individual project case studies to share. What we can point to: client "
+    "testimonials (e.g. from Nestlé, Create, Majid Al Futtaim, Blue Barracuda, FGS, THE AKKAAS, "
+    "and SCPS) and the headline figure of 100+ projects delivered over 10+ years.",
     "portfolio",
     [
         ("/", "Nestlé"),

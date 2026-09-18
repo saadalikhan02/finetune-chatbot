@@ -107,7 +107,7 @@ r3_a = ("Yes - Automotive is one of Technyx's listed industries. They build prem
         "discovery to dealer interaction.")
 followups.append({
     "question": "How many automotive projects have they delivered?",
-    "answer": "For the Automotive industry specifically, Technyx's site lists 20+ projects, 10+ brands, 3 markets, and 10+ years of experience.",
+    "answer": "For the Automotive industry specifically, we list 20+ projects, 10+ brands, 3 markets, and 10+ years of experience.",
     "source_url": "https://technyxsystems.com/industries/automotive",
     "source_page_title": "Automotive Digital Solutions | Technyx",
     "source_section": "Key Statistics",
@@ -136,9 +136,9 @@ print(f"Wrote {len(followups)} follow-up QA records")
 # Each of these topics was checked against the full crawled corpus
 # (data/website/clean/) and confirmed absent before writing the record.
 unknown_answer_variants = [
-    "I don't have verified information about that on the Technyx website - please contact the team directly for an accurate answer.",
-    "That's not something the Technyx website publishes, so I can't confirm it. Reaching out to the team directly would be the best way to get a definitive answer.",
-    "The site doesn't provide that detail, so I don't want to guess. Technyx's team would be able to give you a proper answer if you contact them.",
+    "I don't have verified information about that - please contact our team directly for an accurate answer.",
+    "That's not something I can confirm. Reaching out to our team directly would be the best way to get a definitive answer.",
+    "I don't have that detail, so I don't want to guess. Our team would be able to give you a proper answer if you contact them.",
 ]
 
 unknown_items = [
@@ -183,9 +183,9 @@ out_of_scope_items = [
     "Can you recommend a good movie?",
 ]
 out_of_scope_answer = (
-    "I'm here to help with questions about Technyx Systems and the information on its website "
-    "- I'm not able to help with that. Is there something about Technyx's services, industries, "
-    "or locations I can answer instead?"
+    "I'm here to help with questions about Technyx Systems and our services - I'm not able to "
+    "help with that. Is there something about our services, industries, or locations I can "
+    "answer instead?"
 )
 out_of_scope_records = []
 for question in out_of_scope_items:
@@ -256,7 +256,7 @@ adversarial_items = [
 adversarial_records = []
 for question, expected_behavior, note in adversarial_items:
     if expected_behavior == "state_not_available":
-        answer = "I don't have verified information about that on the Technyx website - please contact the team directly to confirm."
+        answer = "I don't have verified information about that - please contact our team directly to confirm."
     elif expected_behavior == "refuse_out_of_scope":
         answer = out_of_scope_answer
     else:
